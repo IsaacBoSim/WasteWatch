@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Submit Report</title>
+        <style>
+            #asterisk {
+                color: #cc7000;
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <h2 class="mx-3">File a Report to WasteWatch</h2>
+    <p class="mx-3"><span id="asterisk">*</span><small> indicates a required field</small></p>
+    <form class="mx-3" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label class="form-label">Report Title<span id="asterisk">*</span></label>
+            {% render_field form.title placeholder="Enter a title for your report" class+="form-control" rows="1" id="report-title" %}
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Describe the environmental offense you witnessed<span
+                    id="asterisk">*</span></label>
+            {% render_field form.description placeholder="Enter a description for your report..." class+="form-control" rows="5" id="report-desc" %}
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Upload a supporting image, text file, or PDF</label><br>
+            {% render_field form.file class+="form-control" type="file" id="form-file" %}
+        </div>
+        <button type="submit" class="btn" id="custom-submit-btn">Submit Report</button>
+    </form>
+{% endblock %}

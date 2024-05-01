@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+    <div class="container-md text-left">
+    <h1 class="mx-3">Hello {{ request.user }}!</h1>
+    {% if user_reports %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12 mb-3 mb-lg-5">
+                <div class="position-relative card table-nowrap table-card">
+                    <div class="card-header align-items-center">
+                        <h5 class="mb-0">Your reports</h5>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table mb-0">
+                            <thead class="small text-uppercase bg-body text-muted">
+                                <tr class="titles">
+                                    <th>Title</th>
+                                    <th>Description</th>
+                                    <th>Report Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for report in user_reports %}
+                                    <tr class="align-middle clickable-row" data-href="{% url 'view_my_report' report.pk %}">
+                                        <td><a href="{% url 'view_my_report' report.pk %}">{{ report.title }}</a></td>
+                                        <td><a href="{% url 'view_my_report' report.pk %}">{{ report.description }}</a></td>
+                                        <td><a href="{% url 'view_my_report' report.pk %}">{{ report.date }}</a></td>
+                                        {% if report.status == 0 %}
+                                            <td>
+                                                <i class="bi bi-save"></i> <span class="fs-6 fw-normal text-success">New</span>
+                                            </td>
+                                        {% endif %}
+                                        {% if report.status == 1 %}
+                                            <td>
+                                                <i class="bi bi-arrow-repeat"></i> <span class="fs-6 fw-normal text-warning">In Progress</span>
+                                            </td>
+                                        {% endif %}
+                                        {% if report.status == 2 %}
+                                            <td>
+                                                <i class="bi bi-check-circle"></i> <span class="fs-6 fw-normal text-secondary">Resolved</span>
+                                            </td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% if not user_reports %}
+        <p class="mx-3">You have not submitted any reports to WasteWatch yet, but once you do, you will be able to check their status
+        here.</p>
+    {% endif %}
+    </div>
+    <script>
+        jQuery(document).ready(function($) {
+            $(".clickable-row").click(function() {
+                window.location = $(this).data("href");
+            });
+        });
+    </script>
+{% endblock %}

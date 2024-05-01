@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1 class="mt-5">Report Title: {{ report.title }}</h1>
+        <p class="font-weight-bold">Report Description: <span>{{ report.description }}</span></p>
+        {% if report.user %}
+            <p class="font-weight-bold">Submitted by: <span>{{ report.user }}</span></p>
+        {% else %}
+            <p class="font-weight-bold">Submitted anonymously</p>
+        {% endif %}
+        {% if report.text_file %}
+            <iframe src="https://drive.google.com/viewerng/viewer?embedded=true&url={{ report.text_file.url }}"
+                    width="100%" height="400"></iframe>
+        {% endif %}
+        {% if report.image_file %}
+            <img src="{{ report.image_file.url }}" class="img-fluid" alt="Report Image"/>
+        {% endif %}
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label">Resolve Explanation:</label>
+                {% render_field form.resolve_explanation placeholder="Enter notes here" class+="form-control" rows="3" id="notes-field" %}
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Select Report Status:</label><br>
+                {% render_field form.status class+="form-select" type="radio"%}
+            </div>
+            <button type="submit" class="btn btn-primary">Submit Report</button>
+        </form>
+    </div>
+{% endblock %}

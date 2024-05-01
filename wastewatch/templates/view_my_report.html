@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+    <div class="container mx-3">
+        <h1>Report Title: <small class="text-muted">{{ report.title }}</small></h1>
+        <p class="font-weight-bold">Report Description: {{ report.description }}</p>
+        {% if report.user %}
+            <p class="font-weight-bold">Submitted by: {{ report.user }}</p>
+        {% else %}
+            <p class="font-weight-bold">Submitted anonymously</p>
+        {% endif %}
+        {% if report.text_file %}
+            <iframe src="https://drive.google.com/viewerng/viewer?embedded=true&url={{ report.text_file.url }}"
+                    width="100%" height="400"></iframe>
+        {% endif %}
+        {% if report.image_file %}
+            <img src="{{ report.image_file.url }}" class="img-fluid" alt="Report Image"/>
+        {% endif %}
+        {% if report.resolve_explanation %}
+            <p class="font-weight-bold">Report Comments from Review: <span>{{ report.resolve_explanation }}</span></p>
+            {% else %}
+            <p class="font-weight-bold">No admin has resolved this report yet.</p>
+        {% endif %}
+        <div class="row justify-content-left">
+            <div class="col-2">
+                <p class="font-weight-bold">Report Status:</p>
+            </div>
+            <div class="col-2">
+                {% if report.status == 0 %}
+                    <i class="bi bi-save"></i> New
+                {% endif %}
+                {% if report.status == 1 %}
+                     <i class="bi bi-arrow-repeat"></i> In Progress
+                {% endif %}
+                {% if report.status == 2 %}
+                     <i class="bi bi-check-circle"></i> Resolved
+                {% endif %}
+            </div>
+        </div>
+        <a href="{% url 'my_reports' %}" class="btn btn-primary">Return to your reports</a>
+    </div>
+{% endblock %}
